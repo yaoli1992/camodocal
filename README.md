@@ -142,3 +142,29 @@ Go to the build folder where the executables corresponding to the examples are l
   [2]: https://github.com/hengli/camodocal/blob/master/src/examples/intrinsic_calib.cc "src/examples/intrinsic_calib.cc"
   [3]: https://github.com/hengli/camodocal/blob/master/src/examples/stereo_calib.cc "src/examples/stereo_calib.cc"
   [4]: https://github.com/hengli/camodocal/blob/master/src/examples/extrinsic_calib.cc "src/examples/extrinsic_calib.cc"
+
+
+
+
+# modify with yaoli 
+1, /src/brisk/thirdparty/agast/src/文件下的cpp文件添加头文件 #include <opencv2/imgproc/types_c.h>
+  参考的解决方法：https://blog.csdn.net/Toky_min/article/details/107107708
+2. 继续编译遇到的问题找不到
+#add by yaoli 添加到cmakelists中
+INCLUDE_DIRECTORIES(thirdparty/xfeatures2d/include)
+aux_source_directory(thirdparty/xfeatures2d/src  XFEATURE2D_SRC)
+3, 报错问题如‘integer_sequence’ si not a member of std
+解决方法：https://blog.csdn.net/tian19903333/article/details/124557611  在CMake中添加set(CMAKE_CXX_STANDARD 11)
+4 ，报错问题：‘CV_GRAY2BRG’ was not delclares in this scope   解决方法：在头文件中添加 #include <opencv2/imgproc/types_c.h>
+   参考博客 https://blog.csdn.net/weixin_56917387/article/details/128965270
+5， 报错 no matching function for call to ‘_IplImage::_IplImage(cv::Mat&)   解决方案
+IplImage ipl_im = IplImage(im);  替换成  IplImage ipl_im = cvIplImage(im);
+   这里面一共有三处需要修改
+6， “conversion from 'cv::Mat' to non-scalar type 'CvMat requested”   需要文件下的三处修改为：
+		CvMat p2 = points2; ---》 CvMat p2 = cvMat(points2); 特别在five-point.cpp 和modelest.cpp两个文件中修改的比较多
+
+
+
+
+
+  
